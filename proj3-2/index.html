@@ -1,7 +1,297 @@
-<html>
-	<head>
-	</head>
-	<body>
-		Project 3-2 here
-	</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>  
+    div.padded {  
+      padding-top: 0px;  
+      padding-right: 100px;  
+      padding-bottom: 0.25in;  
+      padding-left: 100px;  
+    }  
+  </style> 
+<title>Your Name  |  CS 184</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+</head>
+<body>
+<br />
+<h1 align="middle">Assignment 3-2: Additional Features to PathTracer</h1>
+    <h2 align="middle">Grace Chen, Jerry Zhang</h2>
+    <h2 align="middle">(Webpage URL)</h2>
+
+    <div class="padded">
+        <h3 align="middle">Overview</h3>
+        <p>
+            In this project, we expanded on project 3-1 to add more functionality to the PathTracer we built. We implemented parts 1 and 4 of this project.
+            In part 1, we implemented rendering of mirror and glass materials through reflection and refraction. One of the challenges we encountered here was understanding the concepts behind index of refraction changing (inversing) between entering and exiting, but after understanding that, this part was fairly straight forward to implement.
+            In part 4, we implemented a thin-lens camera model, contrasted with the pinhole camera model we had been working with, in order to be able to adjust focus distance and lens radius elements. One challenge we encountered here was being able to determine the point of intersection between the ray from the lens and the plane of focus, realizing eventually that since we know the desired Z coordinate, we can simply multiply the rest of the coordinates to get the X and Y as well. 
+            Our images turned out to be very interesting and we enjoyed working on these parts of the project.
+        </p>
+
+        
+        * NOTE: For this project, you will choose TWO out of the four given parts to complete. One of those parts must be Part 1 or Part 2. In other words, you can choose any combination of two parts except the pair (Part 3, Part 4).
+
+
+        <h3 align="middle">Part 1. Mirror and Glass Materials</h3>
+        <p>
+            <b>Implementation Summary</b>
+        </p>
+        <p>
+            In this part, we implemented reflect, refract, and the sample_f function of mirror bsdf and glass bsdf. 
+            For the reflect function, we calculated the reflected direction from wo.
+            For the refract function, we caluclated the refraction direction based on wo and the provided ior.
+        </p>
+        <p>
+            For the mirror bdsf's sample function, we called the reflect function we implemented the values and returned the reflectance divided by the absolute cosine theta of the wi direction.
+        </p>
+            For the glass bdsf's sample function, we first calculate the eta value and used Snell's law to check whether there is total internal reflection. 
+            If there is, we would sample a reflected ray in the same way as the mirror bdsf's sample function.
+            If there is not, we computed the Schlick's reflection coefficient and based on the coinflip probability, decide whether we would generate a reflected ray or a refracted ray, and correspondingly update the pdf to R or 1-R. 
+        </p>
+
+        <p><b>
+            Show a sequence of six images of scene `CBspheres.dae` rendered with `max_ray_depth` set to 0, 1, 2, 3, 4, 5, and 100. The other settings should be at least 64 samples per pixel and 4 samples per light. Make sure to include all screenshots.
+        </b></p>
+        <div align="middle">
+            <table style="width:100%">
+              <tr align="center">
+                <td>
+                  <img src="images/spheres_m0.png" align="middle" width="400px"/>
+                  <figcaption>max_ray_depth = 0 (CBspheres.dae)</figcaption>
+                </td>
+                <td>
+                  <img src="images/spheres_m1.png" align="middle" width="400px"/>
+                  <figcaption>max_ray_depth = 1 (CBspheres.dae)</figcaption>
+                </td>
+              </tr>
+              <tr align="center">
+                <td>
+                  <img src="images/spheres_m2.png" align="middle" width="400px"/>
+                  <figcaption>max_ray_depth = 2 (CBspheres.dae)</figcaption>
+                </td>
+                <td>
+                  <img src="images/spheres_m3.png" align="middle" width="400px"/>
+                  <figcaption>max_ray_depth = 3 (CBspheres.dae)</figcaption>
+                </td>
+              </tr>
+              <tr align="center">
+                <td>
+                  <img src="images/spheres_m4.png" align="middle" width="400px"/>
+                  <figcaption>max_ray_depth = 4 (CBspheres.dae)</figcaption>
+                </td>
+                <td>
+                  <img src="images/spheres_m5.png" align="middle" width="400px"/>
+                  <figcaption>max_ray_depth = 5 (CBspheres.dae)</figcaption>
+                </td>
+              </tr>
+              <tr align="center">
+                <td>
+                  <img src="images/spheres_m100.png" align="middle" width="400px"/>
+                  <figcaption>max_ray_depth = 100 (CBspheres.dae)</figcaption>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <br>
+        <br>
+        <p><b>
+            Point out the new multibounce effects that appear in each image. 
+        </b></p>
+        <p>
+            The lights' initial bounces are in a similar manner as project 3-1, where for zero bounce, only the light source is lit up and everything is dark. 
+            At one bounce, the light bounces once and we can see the spheres and the sphere. 
+            At two bounces, we see reflection from the left sphere with the mirror bsdf. 
+            At three bounces, we are able to see refraction because the refracted ray enters the sphere at the first bounce, hits the inside of the sphere at the second bounce and exits at the third bounce.
+            Thus, from three bounces onwards, we are able to see the transparent sphere on the right. 
+            The glass material then becomes visible.  
+            From 4 bounces to 5 bounces to 100 bounces, as we increase the number of bounces, the number of relfections and refractions also increase. 
+            We see that the scene becomes brighter and noisier. 
+        </p>
+        <br>
+        <p><b>
+            Explain how these bounce numbers relate to the particular effects that appear. Make sure to include all screenshots.
+        </b></p>
+        
+        <div>
+            <p>
+                With the new multibounce effects, we see reflection and refractions through the mirror and glass materials.
+            </p>
+            <p>
+                When the max_ray_depth is 0, the scene is complete black except for the light from the light source.
+            </p>
+            <p>
+                When the max_ray_depth is 1, we are able to see the spheres and the balls but the scene is relatively dim and the ceiling is dark. 
+            </p>
+            <p>
+                When the max_ray_depth is 2, the room becomes bright as the ceiling is illuminated with reflected light. 
+                We can see more of the glass material from the sphere on the right as well as the floor is reflected onto the bottom half of the sphere and the sphere is no longer completely black. 
+            </p>
+            <p>
+                When the max_ray_depth is 3, we are able to see the effects of the refraction through the glass sphere on the right. 
+                This makes sense because at the first bounce, the light hits the surface of the sphere and enters, at the second bounce, the light hits the inside of the sphere and is about the exit. 
+                At this third bounce, the light exits from the other side of the sphere and as a result, we can see the bright circle of light within the shadow of the glass sphere. 
+            </p>
+            <p>
+                When the max_ray_depth is 4, we can see that the scene grows brighter from there is now a spot of light on the bottom right of the scene as the result of the added reflection and refraction. 
+            </p>
+            <p>
+                When the max_ray_depth is 5, we see that the scene grows slighter brighter again and edge of shadows for the spheres becomes smoother and also a lighter shade. 
+            </p>
+            <p>
+                When the max_ray_depth is 100, we see that the scene becomes brighter. 
+                This makes sense because as we have increased the number of bounces, the number of reflections and refractions also increase.
+            </p>  
+        </div>
+        <br>
+
+        <h3 align="middle">Part 2. Microfacet Material</h3>
+        <p><b>
+            Show a screenshot sequence of 4 images of scene `CBdragon_microfacet_au.dae` rendered with $\alpha$ set to 0.005, 0.05, 0.25 and 0.5. The other settings should be at least 128 samples per pixel and 1 samples per light. The number of bounces should be at least 5. Describe the differences between different images. Note that, to change the $\alpha$, just open the .dae file and search for `microfacet`.
+        </b></p>
+        <p>
+            Your response goes here.
+        </p>
+        <br>
+        <p><b>
+            Show two images of scene `CBbunny_microfacet_cu.dae` rendered using cosine hemisphere sampling (default) and your importance sampling. The sampling rate should be fixed at 64 samples per pixel and 1 samples per light. The number of bounces should be at least 5. Briefly discuss their difference.
+        </b></p>
+        <p>
+            Your response goes here.
+        </p>
+        <br>
+        <p><b>
+            Show at least one image with some other conductor material, replacing `eta` and `k`. Note that you should look up values for real data rather than modifying them arbitrarily. Tell us what kind of material your parameters correspond to. 
+        </b></p>
+        <p>
+            Your response goes here.
+        </p>
+        <br>
+        
+        
+        
+
+        <h3 align="middle">Part 3. Environment Lightl</h3>
+        <b>Pick one *.exr* file to use for all subparts here. Include a converted *.jpg* of it in your website so we know what map you are using.</b>
+        
+        <p><b>
+            In a few sentences, explain the ideas behind environment lighting (i.e. why we do it/how it works).
+        </b></p>
+        <p>
+            Your response goes here.
+        </p>
+        <br>
+        <p><b>
+            Show the *probability_debug.png* file for the *.exr* file you are using, generated using the `save_probability_debug()` helper function after initializing your probability distributions.
+        </b></p>
+        <p>
+            Your response goes here.
+        </p>
+        <br>
+        <p><b>
+            Use the `bunny_unlit.dae` scene and your environment map *.exr* file and render two pictures, one with uniform sampling and one with importance sampling. Use 4 samples per pixel and 64 samples per light in each. Compare noise levels. Make sure to include all screenshots.
+        </b></p>
+        <p>
+            Your response goes here.
+        </p>
+        <br>
+        <p><b>
+            Use a different image (if you did part 2, we recommend `bunny_microfacet_cu_unlit.dae`) and your environment map *.exr* file and render two pictures, one with uniform sampling and one with importance sampling. Use 4 samples per pixel and 64 samples per light in each. Compare noise levels. Make sure to include all screenshots.
+        </b></p>
+        <p>
+            Your response goes here.
+        </p>
+        <br>
+
+
+
+        <h3 align="middle">Part 4. Depth of Field</h3>
+        <b>
+            For these subparts, we recommend using a microfacet BSDF scene to show off the cool out of focus effects you can get with depth of field!
+        </b>
+        <p><b>
+            Implementation summary: 
+        </b></p>
+        <p>
+            In this part, we implemented code in generate_ray_for_thin_lens. Given a coordinate X, Y, and random numbers rndR (0 to 1) and rndTheta (0 to 2pi), we were able to sample the disk representing our thin lens through calculating the X and Y coordinates, with the Z plane at 0.
+            Then, we determined the focus point through calculating where a ray starting at (0,0,0) intersects with the plane of focus located at Z = -focalDistance. Given these two points (point on the lens sampled, and point on the palne of focus), we generated a ray originating from pLens towards pFocus, and used this ray the same way we did in project 3-1 to perform ray tracing.
+            This allows us to adjust the ray and thus the generated image based on lens radius and focal distance.
+        </p>
+        <p><b>
+            In a few sentences, explain the differences between a pinhole camera model and a thin-lens camera model. 
+        </b></p>
+        <p>
+            In a pinhole camera model, the rays all pass through a single point, the pinhole. This means that we can only capture light as seen from that one point (and it ends up inverted).
+            With the thin-lens camera model, light passes through many points on the lens (rather than just a single point), and its direction is changed and then focused onto the image plane. 
+            This allows us to visualize changes in focal distance to more closely simulate a human eye.
+        </p>
+        <br>
+        <p><b>
+            Show a "focus stack" where you focus at 4 visibly different depths through a scene. Make sure to include all screenshots.
+        </b></p>
+        <p>
+            <div align="middle">
+                <table style="width:100%">
+                  <tr align="center">
+                    <td>
+                      <img src="images/dragon_b125_d4.png" align="middle" width="400px"/>
+                      <figcaption>focal distance = 4 (CBdragon.dae)</figcaption>
+                    </td>
+                    <td>
+                      <img src="images/dragon_b125_d45.png" align="middle" width="400px"/>
+                      <figcaption>focal distance = 4.5 (CBdragon.dae)</figcaption>
+                    </td>
+                  </tr>
+                  <tr align="center">
+                    <td>
+                      <img src="images/dragon_b125_d5.png" align="middle" width="400px"/>
+                      <figcaption>focal distance = 5 (CBdragon.dae)</figcaption>
+                    </td>
+                    <td>
+                      <img src="images/dragon_b125_d55.png" align="middle" width="400px"/>
+                      <figcaption>focal distance = 5.5 (CBdragon.dae)</figcaption>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+        </p>
+        <br>
+        <p><b>
+            Show a sequence of 4 pictures with visibly different aperture sizes, all focused at the same point in a scene. Make sure to include all screenshots.
+        </b></p>
+        <p>
+            <div align="middle">
+                <table style="width:100%">
+                  <tr align="center">
+                    <td>
+                      <img src="images/dragon_b125_d45.png" align="middle" width="400px"/>
+                      <figcaption>lens radius = 0.125 (CBdragon.dae)</figcaption>
+                    </td>
+                    <td>
+                      <img src="images/dragon_b25.png" align="middle" width="400px"/>
+                      <figcaption>lens radius = 0.25 (CBdragon.dae)</figcaption>
+                    </td>
+                  </tr>
+                  <tr align="center">
+                    <td>
+                      <img src="images/dragon_b375.png" align="middle" width="400px"/>
+                      <figcaption>lens radius = 0.375 (CBdragon.dae)</figcaption>
+                    </td>
+                    <td>
+                      <img src="images/dragon_b50.png" align="middle" width="400px"/>
+                      <figcaption>lens radius = 0.5 (CBdragon.dae)</figcaption>
+                    </td>
+                  </tr>
+                </table>
+              </div>        </p>
+        <br>
+        <h3> Collaboration </h3>
+        <p> 
+            Throughout the project, we collaborated on all the parts, working both in person and remotely through a VSCode Live Share. 
+            Overall we debugged the project together and did pair programming throughout.
+            Debugging with two people was great because it is much easier to step back from the code and reference the theory behind it.
+            We learned a lot about how to render different materials in the context of ray tracing and how to generate rays for thin lens. It was really fun to see the cool results!
+        </p>
+    </div>
+</body>
 </html>
+
