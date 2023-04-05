@@ -25,7 +25,7 @@
     <body>
         <div align="middle">
             <h2>CS184 Spring 2023 Final Project</h2>
-            <h1>Proposal: Black Bleak Bagels</h1>
+            <h1>Proposal: The Black Bleak Bagel</h1>
             <h4>Team Members: Grace Chen, Jerry Zhang, Mingyang Wang, Irene Geng</h4>
         </div>
         <div align = "middle">
@@ -54,9 +54,9 @@
                 <p>
                     This leads to many interesting effects:
                     <ul>
-                        <li><u>Gravitational Lensing</u>: when light gets bent, refocused, or distorted when passing near a large object.</li>
-                        <li><u>Gravitational Redshift</u>: when light loses energy when traveling away from a massive object, resulting in a longer wavelength </li>
-                        <li><u>Time Dilation</u>: where time passes more slowly in stronger gravitational fields</li>
+                        <li><b>Gravitational Lensing</b>: when light gets bent, refocused, or distorted when passing near a large object.</li>
+                        <li><b>Gravitational Redshift</b>: when light loses energy traveling away from a massive object, resulting in a longer wavelength </li>
+                        <li><b>Time Dilation</b>: when time passes more slowly in stronger gravitational fields</li>
                         <li>Black hole specific effects:
                             <ul>
                                 <li>
@@ -81,36 +81,58 @@
                 <p>
                     We may wish to account for gravitational redshift/Doppler effect, which would alter the colors of visible light reaching the camera.
                 </p>
+                <p>
+                    We will need to determine how much to weight and combine each of the effects we implement to produce realistic looking images.
+                </p>
             </div>
             <div>
                 <h4>Intended Solution</h4>
-                <p>There are resources from which we can learn the appropriate equations to approximate and model gravitational lensing. We can begin with a simpler model of a non-spinning black hole, and then move forwards with a spinning black hole.</p>
-                <p>Motion blur can be simulated with Monte Carlo estimation, integrating over time in addition to space.</p>
-                <p>One way of rendering a star-field is to create an environment map recording star positions as points in the source plane. This environment map can then be sampled.</p>
-                <p>A black hole only has two independent properties: its mass and the rate at which it spins. After choosing appropriate values for these parameters, we will be able to calculate (or approximate) any other necessary properties, such as its circumference and gravitational pull.</p>
+                <p>
+                    There are resources from which we can learn the appropriate equations to approximate and model gravitational lensing. We can begin with a simpler model of a non-spinning black hole, and then move forwards with a spinning black hole.
+                </p>
+                <p>
+                    Motion blur can be simulated with Monte Carlo estimation, integrating over time in addition to space.
+                </p>
+                <p>
+                    One way of rendering a star-field is to create an environment map recording star positions as points in the source plane. This environment map can then be sampled.
+                </p>
+                <p>
+                    A black hole only has two independent properties: its mass and the rate at which it spins. After choosing appropriate values for these parameters, we will be able to calculate (or approximate) any other necessary properties, such as its circumference and gravitational pull.
+                </p>
             </div>
         </div>
         <div>
             <h2>Goals and Deliverables</h2>
             <div>
                 <h4>What type of images we will create:</h4>
-                <p>Simulation of gravitational lensing around a large black hole, both non-spinning and spinning. We should see the entirely black shadow of the black hole, as well as concentric circles of warped starlight originating from behind the black hole (in the background relative to the camera position).</p>
-                <p>Rendering of black hole with accretion disk; both for non-spinning and spinning black holes.</p>
+                <p>
+                    Simulation of gravitational lensing around a large black hole, both non-spinning and spinning. We should see the entirely black shadow of the black hole, as well as concentric circles of warped starlight originating from behind the black hole (in the background relative to the camera position).
+                </p>
+                <p>
+                    Rendering of black hole with accretion disk; both for non-spinning and spinning black holes.
+                </p>
 
             </div>
             <div>
                 <h4>Interactivity:</h4>
-                <p>Given the computational intensity of renders, our system likely will not be interactive.</p>
+                <p>
+                    Given the computational intensity of renders, our system likely will not be interactive.
+                </p>
             </div>
             <div>
-                <h4>Define how you will measure the quality / performance of your system (e.g. graphs showing speedup, or quantifying accuracy).
+                <h4>
+                    Define how you will measure the quality / performance of your system (e.g. graphs showing speedup, or quantifying accuracy).
                 </h4>
                 <p>
                     While it is difficult to set clear metrics, existing black hole renders such as ___ or pictures like the Einstein Cross provide a good target for expected behavior. 
                 </p>
+                <p>
+                    Define metrics for accuracy to real physics concepts through comparing generated images to reference real life images of black holes forming.
+                </p>
             </div>
             <div>
-                <h4>What questions do you plan to answer with your analysis?
+                <h4>
+                    What questions do you plan to answer with your analysis?
                 </h4>
                 <p>
                     Each effect we implement should have a (hopefully) noticeable effect on the renders. We can compare these with the behavior we expect, and tune parameters to produce different results. 
@@ -131,11 +153,9 @@
                         </li>
                         <li>
                             <u>Multiple objects</u>: Most renders typically focus on only one large object; we could potentially simulate the effects of multiple of these objects all interacting with light and each other.
-
                         </li>
                         <li>
                             Active star deformation and accumulation in the accretion disk: sometimes, when a star gets too close to a black hole, it can be torn apart by the intense tidal forces. The star's matter is gradually added to the accretion disk of the black hole, but forms long streams of gas that could be pretty visualizations.
-
                         </li>
                         <li>
                             Bagels, bunnies, etc
@@ -165,24 +185,46 @@
                             <li>We can also try to create our own .dae files with point lights placed at various places and distances from a central black hole, which will first be modeled with a sphere of the appropriate scaled circumference.                            </li>
                         </ul>
                     </li>
+                    <li> Figure out what physics is lmao </li>
+                    <li> Tasks:                    
+                        <ul>
+                            <li> Create repository and set up rendering pipeline </li>
+                            <li> Learn physics for gravitational lensing </li>
+                            <li> Create star field dae files </li>
+                            <li> Implement and render gravitational lensing images for non-spinning black holes </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
             <div>
                 <h3> Week 2 </h3>
                 <ul>
+                    <li>Gravitational lensing: begin working on gravitational lensing effects caused by a spinning black hole. </li>
                     <li>Research the physical properties and existing models that best mimics the physics properties.</li>
-                    <li>Gravitational lensing: begin working on gravitational lensing effects caused by a spinning black hole.                     </li>
+                    <li> Goal is to produce accurate spinning black hole models with gravitational lensing effects, and begin to tune those effects </li>
+                    <li>Figure out what physics is lmao </li>
+                    <li> Tasks:
+                        <ul>
+                            <li>Learn physics for spinning black hole gravitational lensing effects  </li>
+                            <li>Implement and render gravitational lensing images for spinning black holes  </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
             <div>
                 <h3> Week 3 </h3>
                 <ul>
-                    <li>
-                        Understand physics principles and estimations such that it is somewhat of a realistic estimation but not too computational intensive. 
-                    </li> 
-                    <li>
-                        Modeling: add a semi-realistic accretion disk to the black hole. 
-                    </li>   
+                    <li> Modeling: add a semi-realistic accretion disk to the black hole. </li>  
+                    <li> Understand physics principles and estimations such that it is somewhat of a realistic estimation but not too computational intensive. </li> 
+                    <li> Goal is to model the accretion disk combined with previously implemented effects to generate as realistic of an image as possible at this stage. </li>
+                    <li> Figure out what physics is lmao </li> 
+                    <li> Tasks:
+                        <ul>
+                            <li>Learn the math behind modeling accretion disks  </li>
+                            <li>Implement and render accretion disks combined with gravitational lensing effects </li>
+                            <li>Research additional effects and models to implement in week 4</li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
             <div>
@@ -194,21 +236,27 @@
                     <li>
                         Finalize code and deliverables, create final rendered images.
                     </li>
+                    <li> Figure out what physics is lmao </li> 
+                    <li> Tasks:
+                        <ul>
+                            <li>Finalize code and deliverables, create final rendered images. </li>
+                            <li>Implement at least one additional effect. </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
         <div>
             <h2>Resources</h2>
             <p>
-                Paper extensively discussing physics and code behind the Interstellar black hole: https://iopscience.iop.org/article/10.1088/0264-9381/32/6/065001. This will likely be our primary resource throughout the project.
-
+                Paper extensively discussing physics and code behind the Interstellar black hole: <a href=https://iopscience.iop.org/article/10.1088/0264-9381/32/6/065001>https://iopscience.iop.org/article/10.1088/0264-9381/32/6/065001 </a>. This will likely be our primary resource throughout the project.
             </p>
             <p>
                 Example shaders linked in the past 184 black hole project, which we can use as references to which we compare our own renders.
                 <ul>
-                    <li>black hole with bloom filter: https://www.shadertoy.com/view/lstSRS</li>
-                    <li>spinning black hole with accretion disk: https://www.shadertoy.com/view/tsBXW3</li>
-                    <li>gravitational lensing: https://www.shadertoy.com/view/MtByRh</li>
+                    <li>black hole with bloom filter: <a href="https://www.shadertoy.com/view/lstSRS">https://www.shadertoy.com/view/lstSRS</a></li>
+                    <li>spinning black hole with accretion disk: <a href="https://www.shadertoy.com/view/tsBXW3">https://www.shadertoy.com/view/tsBXW3</a></li>
+                    <li>gravitational lensing: <a href = "https://www.shadertoy.com/view/MtByRh">https://www.shadertoy.com/view/MtByRh</a></li>
                 </ul>
             </p>
             <p>
