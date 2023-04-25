@@ -1,0 +1,182 @@
+<html>
+    <style>
+    body {
+        background-color: white;
+        padding: 100px;
+        width: 1000px;
+        margin: auto;
+        text-align: left;
+        font-weight: 300;
+        font-family: 'Open Sans', sans-serif;
+        color: #121212;
+    }
+    h1, h2, h3, h4 {
+        font-family: 'Source Sans Pro', sans-serif;
+    }
+    kbd {
+        color: #121212;
+    }
+    </style>
+
+    <header>
+
+    </header>
+
+    <body>
+        <div align="middle">
+            <h2>CS184 Spring 2023 Final Project</h2>
+            <h1>Milestone Status Report: Black Hole Renderer  </h1>
+            <h4>Team Members: Grace Chen, Jerry Zhang, Mingyang Wang, Irene Geng</h4>
+        </div>
+        <div align = "middle">
+            <img src = "images/gravitational_lens_accretion_disk.png" width = 400px height = 300px>
+        </div>
+        <div>
+            <h2> Summary: Current Accomplishments</h2>
+            <div>
+                <p> We implemented ray marching that uses the forward euler method to trace rays of light while under the effect of strong gravity. We modeled the behavior of light in the presence of a Schwarzschild black hole, a simplified class of black hole that has no electric charge or angular momentum. Additionally, we implemented an accretion disk and implemented texture mapping to develop images with various starfield backgrounds. The accretion disk texture map is TBD, since we were unable to find anything we liked :( </p>
+            </div>
+        </div>
+        <div>
+            <h2> Preliminary Results </h2>
+            <div>
+                <p> Our first step was to implement ray marching; to do this, we modified the ray definition from Project 3.1 to additionally have a velocity attribute. Then, instead of doing line-object intersection, we used the forward euler method to “march” our rays through the scene, updating the ray’s velocity at each time step to account for the effects of gravity.
+                </p>
+
+                <p>
+                    We represent an accretion disk as a flat disk lying in the horizontal plane with an inner and outer radius. For the rendered images below, we set the inner radius to 1.5 times the Schwarzschild radius, which is the closest radius at which unstable orbits can exist. Additionally, by moving the camera off center, we can observe distortion of the background.
+                </p>
+                <p>
+                    We also implemented texture mapping in preparation for mapping different star background and accretion disk textures onto our rendering. To aid with visualization, we created debug renderings by texture mapping checkerboard patterns onto our black hole, accretion disk, and background.
+
+                </p>
+                <p>
+                    For images rendered with ray marching, we can observe the effects of light rays bending around the sphere (and accretion disk), making the backside visible along the edges (we are seeing the entire surface of the sphere from the camera front view).
+
+                </p>
+            </div>
+            <div align="middle">
+                <table style="width:100%">
+                  <tr align="center">
+                    <td>
+                      <img src="images/normal_ray.png" align="middle" width="400px"/>
+                      <figcaption>Normal Ray </figcaption>
+                    </td>
+                    <td>
+                      <img src="images/gravitational_lens.png" align="middle" width="400px"/>
+                      <figcaption>Gravitational Lensing</figcaption>
+                    </td>
+                  </tr>
+                  <tr align="center">
+                    <td>
+                      <img src="images/normal_ray_checkered.png" align="middle" width="400px"/>
+                      <figcaption>Normal Ray with Checkered Background </figcaption>
+                    </td>
+                    <td>
+                      <img src="images/gravitational_lens_checkered.png" align="middle" width="400px"/>
+                      <figcaption>Gravitational Lensing with Checkered Background</figcaption>
+                    </td>
+                  </tr>
+                </table>
+            </div>
+
+            <div>
+                <p>
+                    For visualization purposes (mostly because we were bored), we also did a standalone rendering of the background:
+    
+                </p>
+                <div align="middle">
+                    <table style="width:100%">
+                      <tr align="center">
+                        <td>
+                          <img src="images/background_render.png" align="middle" width="400px"/>
+                        </td>
+                      </tr>
+                      
+                    </table>
+                </div>
+            </div>
+            
+            <p>
+                Lastly, we did a few renders with various star field textures in the background.
+            </p>
+            <div align="middle">
+                <table style="width:100%">
+                  <tr align="center">
+                    <td>
+                      <img src="images/background_1.png" align="middle" width="400px"/>
+                    </td>
+                    <td>
+                      <img src="images/background_2.png" align="middle" width="400px"/>
+                    </td>
+                  </tr>
+                  <tr align="center">
+                    <td>
+                      <img src="images/background_3.png" align="middle" width="400px"/>
+                    </td>
+                    <td>
+                      <img src="images/background_4.png" align="middle" width="400px"/>
+                    </td>
+                  </tr>
+                  <tr align="center">
+                    <td>
+                      <img src="images/background_5.png" align="middle" width="400px"/>
+                    </td>
+                    
+                  </tr>
+                </table>
+            </div>
+
+        </div>
+        <div>
+            <h2> Our Progress Relative to Our Plan </h2>
+            <div>
+                <p> We are fairly on track according to our original plans in our project proposal. Previously, our target deliverables include simulation of gravitational lensing around a large black hole and rendering of black hole with accretion disk, for both non-spinning and spinning cases. Currently, we built simulations of gravitational lensing and accretion disk for non-spinning black holes, completing the majority of the gravitational lensing and modeling tasks we planned for the first 3 weeks. </p>
+            </div>
+        </div>
+        <div>
+            <h2> Updated Work Plan </h2>
+            <div>
+                <h4> Week 4 (April 25 - April 29th) </h4>
+                <ul>
+                    <li>
+                        <b> Gravitational lensing (Kerr Black Hole): </b>
+                        <ul>
+                            <li>
+                                Research the physical properties and existing models that best mimics the Kerr Black Hole
+                            </li>
+                            <li>
+                                Implement and render gravitational lensing images for spinning black holes
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <b> Textures:  </b>
+                        <ul>
+                            <li>
+                                Search for pretty images and textures for the accretion disk and star field background.
+                            </li>
+                            <li>
+                                If we are unable to find any online, we will use photoshop to create our own textures.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h4> Week 5 (April 30 - May 4th)  </h4>
+                <ul>
+                    <li>
+                        Finalize code and deliverables, create final rendered images.
+                    </li>
+                    <li>
+                        <b> Additional effects: </b> 
+                        perhaps apply lens flare to get more visually attractive images. 
+                        If time permits, we would also experiment with models of different shapes, 
+                        such as that of a bagel from Everything Everywhere All at Once :)) (or the rabbit from the path tracing projects) 
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>
