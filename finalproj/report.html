@@ -75,7 +75,7 @@
                     <a href="https://docs.google.com/presentation/d/1_prJLe6kyc7dSLX8dIAgGah_qeH1JckdDUp0xO9Doh8/edit#slide=id.p"> Presentation Slides</a>
                 </p>
                 <p> See link to our 
-                    <a href=""> Final Video </a>
+                    <a href="https://drive.google.com/file/d/1J1dCBIy9_wyOX5tgKADQYcKYupsaswPQ/view?usp=share_link"> Final Video </a>
                 </p>
                 
             </div>
@@ -87,10 +87,10 @@
             <h2> Preface: Setup and Physics Overview  </h2>
             <div>
                 <p>
-                  The black holes that we consider can be entirely described by their mass and angular momentum; all other relevant properties may be calculated deterministically from these two properties. Every black hole has a Schwarzschild radius, which is defined as: $$r_s = 2GM / c^2$$
+                  The black holes that we consider can be entirely described by their mass and angular momentum; all other relevant properties may be calculated deterministically from these two properties. Every black hole has a Schwarzschild radius, which is defined as: \(r_s = 2GM / c^2\)
                 </p>
                 <p>
-                    We define our coordinate systems such that the black hole is centered at the origin. As is typical practice in theoretical physics, parameters are normalized such that the mass of the black hole , Gravitational Constant , and speed of light  are set to 1. As a result, all distances are (implicitly) measured in units of the black hole’s Schwarzschild radius. We point the camera directly at the black hole such that the black hole is centered in its field of view.
+                    We define our coordinate systems such that the black hole is centered at the origin. As is typical practice in theoretical physics, parameters are normalized such that the mass of the black hole \(M\), Gravitational Constant \(G\), and speed of light \(c\) are set to 1. As a result, all distances are (implicitly) measured in units of the black hole’s Schwarzschild radius. We point the camera directly at the black hole such that the black hole is centered in its field of view.
                 </p>
                 <div align="middle">
                     <table style="width:100%">
@@ -103,7 +103,7 @@
                     </tr>
                     </table>
                 </div>
-                <p> The above diagram [10] shows several photon trajectories as they travel past the black hole. Any ray that travels close enough to the black hole and crosses the event horizon (the black circle, with radius equal to rs ) becomes trapped, forming the black hole’s “shadow.” Rays outside of this threshold are bent around and may orbit, but do not get trapped in, the black hole. Note that light can orbit multiple times around the black hole, as is the case with one of the purple rays.</p>
+                <p> The above diagram [10] shows several photon trajectories as they travel past the black hole. Any ray that travels close enough to the black hole and crosses the <i>event horizon</i> (the black circle, with radius equal to \(r_s\)) becomes trapped, forming the black hole’s “shadow.” Rays outside of this threshold are bent around and may orbit, but do not get trapped in, the black hole. Note that light can orbit multiple times around the black hole, as is the case with one of the purple rays.</p>
                 <div align="middle">
                     <table style="width:100%">
                     <tr align="center">
@@ -141,10 +141,10 @@
                         Because light rays do not travel in straight paths around a black hole, we can no longer use traditional ray tracing line intersection tests to check for intersections. Instead, we use ray marching, a technique that simulates the (non-linear) path of a light ray by taking small steps through a scene, updating ray parameters where necessary, and computing intersections with the objects the ray encounters along the way.
                     </p>
                     <p> 
-                        At any position, we approximate the ray’s acceleration due to gravity with:
+                        At any position, we approximate the ray’s acceleration due to gravity with: \(acceleration = -1.5 h^2 \frac{\hat{r}}{||r|| ^ 5}\)
                     </p>
                     <p>
-                        where  is defined as the magnitude of the ray’s specific angular momentum, a constant value calculated once per ray, and  is defined as the vector pointing from the center of the sphere to the photon’s current position. See Appendix A for details and derivations.
+                        where \(h\) is defined as the magnitude of the ray’s specific angular momentum, a constant value calculated once per ray, and \(r\) is defined as the vector pointing from the center of the sphere to the photon’s current position. See Appendix A for details and derivations.
                     </p>
                 </div>
 
@@ -152,11 +152,12 @@
                 <div>
                     <p>
                         With this acceleration, we can then march rays “backwards” in time using Forward Euler integration, updating the photon’s position and velocity at each time step. 
-
+                        \[curr\_position = prev\_position + velocity * dt\]
+                        \[curr\_velocity = prev\_velocity + acceleration * dt\]
                     </p>
                     
                     <p>
-                        Since our black hole is represented by a sphere centered at the origin, we can test whether a ray has intersected the black hole with the standard geometric ray-sphere intersection between prev_position and curr_position of each ray marching timestep. This yields the following result:
+                        Since our black hole is represented by a sphere centered at the origin, we can test whether a ray has intersected the black hole with the standard geometric ray-sphere intersection between <i>prev_position</i> and <i>curr_position</i> of each ray marching timestep. This yields the following result:
                     </p>
                     <div align="middle">
                         <table style="width:100%">
@@ -183,7 +184,7 @@
 
                     </p>
                     <p>
-                        If the ray has not intersected either the sphere or the accretion disk after taking the maximum number of steps, or the ray travels a sufficiently large distance away from the black hole (ie  , we conclude that the ray escapes to infinity; in the physical model, this corresponds to the ray originating from the background (aka the celestial sphere).
+                        If the ray has not intersected either the sphere or the accretion disk after taking the maximum number of steps, or the ray travels a sufficiently large distance away from the black hole (ie \(20r_s\)) , we conclude that the ray escapes to infinity; in the physical model, this corresponds to the ray originating from the background (aka the celestial sphere).
                     </p>
                     <p>
                         Additionally, we implement texture mapping for the black hole surface, accretion disk, and background for debugging as well as preparation for rendering realistic accretion disks and starfield backgrounds. Mapping checkerboard grid patterns provide a helpful visualization for the behavior of light in our render:
@@ -256,44 +257,81 @@
                 <h3>Improvments: Boyer-Lindquist</h3>
                 <div>
                     <p>
-                        Boyer-Lindquist Coordinates consist of 4 components: . The first 3 coordinates, , are oblate spherical coordinates. Like in the Schwarzschild case, these coordinates are typically normalized such that the black hole radius is 1. We also have a -coordinate, which marks the time of an event relative to a distant, unmoving observer. This coordinate system allows us to take into account the asymmetric effect of a black hole’s rotation on spacetime curvature.
+                        Boyer-Lindquist Coordinates consist of 4 components: \((r, \theta, \phi, t)\). The first 3 coordinates, \((r, \theta, \phi)\), are oblate spherical coordinates. Like in the Schwarzschild case, these coordinates are typically normalized such that the black hole radius is 1. We also have a \(t\)-coordinate, which marks the time of an event relative to a distant, unmoving observer. This coordinate system allows us to take into account the asymmetric effect of a black hole’s rotation on spacetime curvature.
                     </p>
                     <p> Boyer-Lindquist Coordinates can be converted into Cartesian coordinates via:
 
                         <ul>
                             <li>
-
+                                \(x = \sqrt{r^2 + a^2}\sin{\theta}\cos{\phi}\)
                             </li>
                             <li>
-
+                                \(y = \sqrt{r^2 + a^2}\sin{\theta}\sin{\phi}\)
                             </li>
                             <li>
-
+                                \(z = r\cos{\theta}\)
                             </li>
                         </ul>
                     </p>
-                    <p> The Kerr metric describes the geometry of spacetime around a black hole of mass M and angular momentum J. In Boyer-Lindquist coordinates, distance (the line element) is defined by:
-
+                    <p> The Kerr metric describes the geometry of spacetime around a black hole of mass \(M\) and angular momentum \(J\). In Boyer-Lindquist coordinates, distance (the line element) is defined by:
+                        \[ds^2=-\frac{\Delta }{\Sigma }(dt-a sin^2\theta d\phi )^2+\frac{sin^2\theta }{\Sigma}((r^2+a^2)d\phi -adt)^2+\frac{\Sigma }{\Delta }dr^2+ \Sigma d\theta ^2\]
                         <ul>
                             <li>
-
+                                \(\Delta = r^2 - 2 M r + a^2 + Q^2\): the discriminant for electrical charge
                             </li>
                             <li>
-
+                                \(\Sigma = r^2 + a^2 \cos^2(\theta)\)
                             </li>
                             <li>
-                                
+                                \(a = \frac{J}{Mc}\) : Kerr parameter - the ratio between the black hole’s angular momentum and mass. \(a = 0\) for non-rotating black holes and \(0 < a < 1\) for rotating black holes.
                             </li>
                             <li>
-                                
+                                As in typical practice, we normalize \(M = 1\).
                             </li>
                             <li>
-                                
+                                Kerr black holes have no electric charge, so \(Q = 0\).  
                             </li>
                         </ul>
                     </p>
                     <p>
-                        Around a Kerr black hole, a photon follows a null geodesic path, the shortest distance path between two points in curved spacetime. This can be determined by solving a system of differential equations, shown in the table below, where derivatives are taken with respect to propertime 𝜏. is the ray’s four-momentum, a generalization of three-dimensional momentum to spacetime. As a convenient convention, we set the ray’s conserved energy, . 
+                        Around a Kerr black hole, a photon follows a null geodesic path, the shortest distance path between two points in curved spacetime. This can be determined by solving a system of differential equations, shown in the table below, where derivatives are taken with respect to propertime 𝜏.\(p = (p_r, p_{\theta}, p_{\phi}, p_t)\) is the ray’s four-momentum, a generalization of three-dimensional momentum to spacetime. As a convenient convention, we set the ray’s conserved energy, \(-p_t = 1\). 
+                        <div align="middle">
+                            <table style="width:100%; border: 1px solid">
+                        
+                                <tr align="center">
+                                    <td style="border: 1px solid">
+                                        \(r' = \frac{\Delta}{\Sigma}p_r\)
+                                    </td>
+                                    <td style="border: 1px solid">
+                                        \(p_r' = \frac{(r - 1) * (-\kappa) + 2r(r^2 + a^2) - 2aL}{\Delta\Sigma} - \frac{2p_r^2(r - 1)}{\Sigma}\)
+                                    </td>
+                                </tr>
+                                <tr align="center">
+                                    <td style="border: 1px solid">
+                                        \(\theta ' = \frac{1}{\Sigma}p_{\theta}\)
+                                    </td>
+                                    <td style="border: 1px solid">
+                                        \(p_{\theta}' = \frac{\sin\theta \cos\theta (\frac{L^2}{a^2} - a^2)}{\Sigma}\)
+                                    </td>
+                                </tr>
+                                <tr align="center">
+                                    <td style="border: 1px solid">
+                                        \(\phi ' = \frac{2ar + (\Sigma - 2r)\frac{L}{\sin^2\theta}}{\Delta\Sigma}\)
+                                    </td>
+                                    <td style="border: 1px solid">
+                                        \(p_{\phi}' = 0\)
+                                    </td>
+                                </tr>                                
+                                <tr align="center">
+                                    <td style="border: 1px solid">
+                                        \(t' = \frac{1 + (2r(r^2 + a^2) - 2arL)}{\Delta\Sigma}\)
+                                    </td>
+                                    <td style="border: 1px solid">
+                                        \(p_t' = 0\)
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </p>
                 </div>
 
@@ -509,49 +547,41 @@
 
 
             <h3> Starfield Accretion Texture Mapping Results</h3>
-            <p>Lastly, we present some large, high-quality renders we produced. These took roughly 6.5 hours each on a 10 core machine:
+            <p>Lastly, we present some large, high-quality renders we produced. From the starfields on the left, we generated the images on the right. These took roughly 6.5 hours each on a 10 core machine:
             </p>
 
             <div align="middle">
                 <table style="width:100%">
                 <tr align="center">
                     <td>
-                    <img src="final_images/5.png" align="middle" width="400px"/>
-                    <figcaption></figcaption>
+                    <img src="final_images/5.png" align="middle" width="200px"/>
                     </td>
                     <td>
-                    <img src="final_images/text_5.png" align="middle" width="400px"/>
-                    <figcaption></figcaption>
+                    <img src="final_images/text_5.png" align="middle" width="600px"/>
                     </td>
                 </tr>
                 <tr align="center">
                     <td>
-                    <img src="final_images/3.png" align="middle" width="400px"/>
-                    <figcaption></figcaption>
+                    <img src="final_images/3.png" align="middle" width="200px"/>
                     </td>
                     <td>
-                    <img src="final_images/text_3.png" align="middle" width="400px"/>
-                    <figcaption></figcaption>
+                    <img src="final_images/text_3.png" align="middle" width="600px"/>
                     </td>
                 </tr>
                 <tr align="center">
                     <td>
-                        <img src="final_images/2.png" align="middle" width="400px"/>
-                        <figcaption></figcaption>
+                        <img src="final_images/2.png" align="middle" width="200px"/>
                     </td>
                     <td>
-                        <img src="final_images/text_2.png" align="middle" width="400px"/>
-                        <figcaption></figcaption>
+                        <img src="final_images/text_2.png" align="middle" width="600px"/>
                     </td>
                 </tr>
                 <tr align="center">
                     <td>
-                        <img src="final_images/1.png" align="middle" width="400px"/>
-                        <figcaption></figcaption>
+                        <img src="final_images/1.png" align="middle" width="200px"/>
                     </td>
                     <td>
-                        <img src="final_images/text_1.png" align="middle" width="400px"/>
-                        <figcaption></figcaption>
+                        <img src="final_images/text_1.png" align="middle" width="600px"/>
                     </td>
                 </tr>
                 </table>
@@ -706,39 +736,74 @@
                     The following derivation was taken from [3]:
                 </p>
                 <p>
-                    For a Schwarzschild Black Hole, the angular momentum  and charge . Additionally, we normalize the speed of light  and the black hole’s Schwarzchild radius . Therefore, the line element (in spherical coordinates) can be defined as:
+                    For a Schwarzschild Black Hole, the angular momentum \(a = 0\) and charge \(Q = 0\). Additionally, we normalize the speed of light \(c = 1\) and the black hole’s Schwarzchild radius \(r_s = 1\). Therefore, the line element (in spherical coordinates) can be defined as:
+                    \[ds^2 = (1 - \frac{1}{r})dt^2 - (1 - \frac{1}{r})^{-1}dr^2 - r^2d\theta^2 - r^2\sin^2\theta d\phi^2\]
+                </p>
+                <p>
+                    We set \(\theta = \frac{\pi}{2}\), so \(d\theta = 0\). Additionally, we define \(e = (1 - \frac{1}{r})\frac{dt}{d\tau}\) and \(l = r^2 \frac{d\phi}{d\tau}\), and then set \(ds^2 = 1\).
+                    \[(1 - \frac{1}{r})dt^2 - (1 - \frac{1}{r})^{-1}dr^2 - r^2d\theta^2 - r^2\sin^2\theta d\phi^2 = 1\]
+                    \[\frac{1}{1 - \frac{1}{r}} * e^2 - \frac{1}{1 - \frac{1}{r}}\frac{dr^2}{d\tau^2} - r^2 * 0 - \frac{l^2}{r^2} = 1\]
+                    \[\frac{1}{1 - \frac{1}{r}}\frac{dr^2}{d\tau^2} = \frac{1}{1 - \frac{1}{r}} * e^2 - 1 - \frac{l^2}{r^2}\]
+                    \[\frac{dr^2}{d\tau^2} = e^2 - (1 - \frac{1}{r}) (1 + \frac{l^2}{r^2})\]
+                    \[r^4 \frac{dr^2}{d\tau^2} = r^4 \frac{dr^2}{d\phi^2}\frac{d\phi^2}{d\tau^2} = l^2 \frac{dr^2}{d\phi^2} = r^4 e^2 - (1 - \frac{1}{r}) (r^4 + r^2l^2)\]
+                    \[\frac{dr^2}{d\phi^2} = \frac{r^4 e^2}{l^2} - (1 - \frac{1}{r}) (\frac{r^4}{l^2} + r^2)\]
+
+                
+                
+                </p>
+                <p>
+                    We then perform the change of coordinates \(r \implies u = \frac{1}{r}\), yielding:
+                    \[\frac{du^2}{d\phi^2} = \frac{1}{b^2} - (1 - u) (a^{-2} + u^2)\]
+                    where \(b = \frac{l}{e})\ and \(a = l\)
+                </p>
+                <p>
+                    We take \(\lim_{a \to \inf}\), so \(\frac{du^2}{d\phi^2} = \frac{1}{b^2} - (1 - u) (u^2)\)
 
                 </p>
                 <p>
-                    We set , so . Additionally, we define  and , and then set .
-                </p>
-                <p> 
-                    RE, where  and 
+                    This equation can then be solved to yield: \(u^{''}(\phi) = -u (1 - \frac{3}{2} u^2)\), or \(u^{''}(\phi) + u = \frac{3}{2} u^3\).
                 </p>
                 <p>
-                    We then perform the change of coordinates , yielding:
-
+                    The Binet equation for the equation for orbit of a particle is \(u^{''} + u = - \frac{1}{mh^2u^2}F(u)\)
                 </p>
                 <p>
-                    We take , so 
-
-                </p>
-                <p>
-                    This equation can then be solved to yield: , or .
-                    The Binet equation for the equation for orbit of a particle is 
-                    By setting , equating the above two equations, and plugging back in , we obtain:
-                    , which we can use for ray marching
-
+                    By setting \(m = 1\), equating the above two equations, and plugging back in \(r = \frac{1}{u}\), we obtain:
+                    \(F = a = -\frac{3}{2}h^2\frac{\hat{r}}{r^5}\), which we can use for ray marching
                 </p>
 
                 <h2> B: Cash-Karp Integration </h2>
                 <div>
                     <p>
                         The Cash-Karp method is a type of Runge-Kutta method (the same family as Forward Euler Integration), which approximate the solution of an ODE by iteratively computing a sequence of intermediate values that depend on the previous values and the derivatives of the function at those values. Cash-Karp is a fifth order method, and estimates/integrates forward via:
-
+                        \[y_{n+1} = y_n + h \sum_{i=1}^s b_i k_i\]
+                        where:
+                        <ul>
+                            <li>\(k_1 = f(t_n, y_n)\)</li>
+                            <li>\(k_2 = f(t_n + \frac{1}{5}*h, y_n + \frac{1}{5}k_1*h)\)</li>
+                            <li>\(k_3 = f(t_n + \frac{3}{10}*h, y_n + (\frac{3}{40}k_1 + \frac{9}{40}k_2)*h)\)</li>
+                            <li>\(k_4 = f(t_n + \frac{3}{5}*h, y_n + (\frac{3}{10}k_1 - \frac{9}{10}k_2 + \frac{6}{5}k_3)*h)\)</li>
+                            <li>\(k_5 = f(t_n + h, y_n + (\frac{-11}{54}k_1 - \frac{5}{2}k_2 + \frac{-70}{27}k_3 + \frac{35}{27}k_4)*h)\)</li>
+                            <li>\(k_6 = f(t_n + \frac{7}{8} h, y_n + (\frac{1631}{55296}k_1 - \frac{175}{512}k_2 + \frac{575}{13824}k_3 + \frac{44275}{110592}k_4 + \frac{253}{4096}k_5)*h)\)</li>
+                            <li>\(b_1 = \frac{37}{378}\)</li>
+                            <li>\(b_2 = 0\)</li>
+                            <li>\(b_3 = \frac{250}{621}\)</li>
+                            <li>\(b_4 = \frac{125}{594}\)</li>
+                            <li>\(b_5 = 0\)</li>
+                            <li>\(b_6 = \frac{512}{1771}\)</li>
+                        </ul>
                     </p>
                     <p> 
                         Additionally, Cash-Karp includes a sixth-order estimate to estimate the error of the fifth order solution.  For every timestep, if the error estimate is too large, then Cash-Karp reduces the step size until the error is below some threshold. Error is calculated via
+                        \[e_{n+1} = y_{n+1} - y_{n+1}^* = h \Sigma_{i=1}^s(b_i - b_i^*)k_i\], where:
+                        <ul>
+                            <li>\(y_{n+1}^* = y_n + h \Sigma_{i=1}^sb_i^*k_i\)</li>
+                            <li>\(b_1^* = \frac{2825}{27648}\)</li>
+                            <li>\(b_2^* = 0\)</li>
+                            <li>\(b_3^* = \frac{18575}{48384}\)</li>
+                            <li>\(b_4^* = \frac{13525}{55296}\)</li>
+                            <li>\(b_5^* = \frac{277}{14336}\)</li>
+                            <li>\(b_6^* = \frac{1}{4}\)</li>
+                        </ul>
                     </p>
                     <p> 
                         Cash-Karp is advantageous because it allows for high accuracy and efficiency due to its adaptive step size control. In our application, this allows us to take large step sizes while far away from the black hole (where the effect of gravitational lensing is less apparent) and smaller step sizes while close to the black hole, where photon trajectories change drastically.
