@@ -31,8 +31,9 @@
             <img src = "" width = 800px height = 400px>
         </div> -->
         <div align="middle">
-            <h2>CS184 Spring 2023 Final Project</h2>
-            <h1>Final Report: Black Hole Ray Marcher </h1>
+            <h1>Ray Marching for Rendering Physically Realistic Black Holes </h1>
+            <h2>CS184 Sp23 Final Project Report</h2>
+            
             <h4>Team Members: Grace Chen, Jerry Zhang, Mingyang Wang, Irene Geng</h4>
         </div>
         <div align="middle">
@@ -58,7 +59,7 @@
         <br>
         
         <div>
-            <h2> Abstract </h2>
+            <h1> Abstract </h1>
             <div>
                 <p> 
                     In most graphics applications, we assume that light travels in a perfectly straight line. While this is a safe assumption in most scenarios, this is not always the case. 
@@ -73,18 +74,20 @@
                 <p> See link to our 
                     <a href="https://docs.google.com/presentation/d/1_prJLe6kyc7dSLX8dIAgGah_qeH1JckdDUp0xO9Doh8/edit#slide=id.p"> Presentation Slides</a>
                 </p>
-                <p> See link to our <a href=""> Final Video </a></p>
+                <p> See link to our 
+                    <a href=""> Final Video </a>
+                </p>
                 
             </div>
             
         </div>
         <br>
         <div>
-            <h2> Technical Approach </h2>
-            <h3> Preface: Setup and Physics Overview  </h3>
+            <h1> Technical Approach </h1>
+            <h2> Preface: Setup and Physics Overview  </h2>
             <div>
                 <p>
-                  The black holes that we consider can be entirely described by their mass and angular momentum; all other relevant properties may be calculated deterministically from these two properties. Every black hole has a Schwarzschild radius, which is defined as: \($$r_s = 2GM / c^2$$)
+                  The black holes that we consider can be entirely described by their mass and angular momentum; all other relevant properties may be calculated deterministically from these two properties. Every black hole has a Schwarzschild radius, which is defined as: $$r_s = 2GM / c^2$$
                 </p>
                 <p>
                     We define our coordinate systems such that the black hole is centered at the origin. As is typical practice in theoretical physics, parameters are normalized such that the mass of the black hole , Gravitational Constant , and speed of light  are set to 1. As a result, all distances are (implicitly) measured in units of the black hole’s Schwarzschild radius. We point the camera directly at the black hole such that the black hole is centered in its field of view.
@@ -100,7 +103,7 @@
                     </tr>
                     </table>
                 </div>
-                <p> The above diagram (stolen from google, somewhere) shows several photon trajectories as they travel past the black hole. Any ray that travels close enough to the black hole and crosses the event horizon (the black circle, with radius equal to rs ) becomes trapped, forming the black hole’s “shadow.” Rays outside of this threshold are bent around and may orbit, but do not get trapped in, the black hole. Note that light can orbit multiple times around the black hole, as is the case with one of the purple rays.</p>
+                <p> The above diagram [10] shows several photon trajectories as they travel past the black hole. Any ray that travels close enough to the black hole and crosses the event horizon (the black circle, with radius equal to rs ) becomes trapped, forming the black hole’s “shadow.” Rays outside of this threshold are bent around and may orbit, but do not get trapped in, the black hole. Note that light can orbit multiple times around the black hole, as is the case with one of the purple rays.</p>
                 <div align="middle">
                     <table style="width:100%">
                     <tr align="center">
@@ -113,7 +116,7 @@
                     </table>
                 </div>
                 <p> 
-                    The above diagram demonstrates some of the behavior we expect to see when rendering black holes. At the center, we see the Black Hole Shadow, surrounded by a bright photon ring. The photon ring is a region where the black hole’s gravity forces photons into orbits around the event horizon. The Accretion Disk, despite being modeled as a perfectly flat disk, appears above and below the shadow due to light rays curving around the black hole.
+                    The above diagram (one of our own renders!) demonstrates some of the behavior we expect to see when rendering black holes. At the center, we see the Black Hole Shadow, surrounded by a bright photon ring. The photon ring is a region where the black hole’s gravity forces photons into orbits around the event horizon. The Accretion Disk, despite being modeled as a perfectly flat disk, appears above and below the shadow due to light rays curving around the black hole.
                 </p>
                 <p>
                     The Einstein Ring, represented as the dotted white circle, is the point(s) at which all light rays are perfectly bent such that they hit the same object, creating “rings” of distortion. Objects visible outside of the Einstein Ring have secondary images reflected on the opposite side of the black hole inside the Einstein Ring, such as shown in the two orange circles and the two yellow circles.
@@ -127,7 +130,7 @@
                 
             </div>
 
-            <h3> Initial Approach: Schwarzschild</h3>
+            <h2> Initial Approach: Schwarzschild</h2>
             <div>
                 <h4> Overview: Ray Marching</h4>
                 <div>
@@ -145,7 +148,7 @@
                     </p>
                 </div>
 
-                <h4> Forward Euler Integration</h4>
+                <h3> Forward Euler Integration</h3>
                 <div>
                     <p>
                         With this acceleration, we can then march rays “backwards” in time using Forward Euler integration, updating the photon’s position and velocity at each time step. 
@@ -224,9 +227,9 @@
                 
             </div>
 
-            <h3> Second Approach: Kerr Black Hole</h3>
+            <h2> Second Approach: Kerr Black Hole</h2>
             <div>
-                <h4> Overview/Limitations of the previous approach</h4>
+                <h4> Overview and Limitations of the previous approach</h4>
                 <div>
                     <p>
                         A Kerr black hole is a more complex model for a black hole that has non-zero angular momentum (but still zero charge). Unfortuantely, the curvature of black hole spacetime means that they cannot be easily or properly represented by Cartesian coordinates. To better account for the physical effects of the black hole's rotation, we instead use Boyer-Lindquist coordinates, a type of coordinate system used in the theory of general relativity to describe the geometry of spacetime around any rotating massive object (like black holes).
@@ -250,7 +253,7 @@
                     </p>
                 </div>
 
-                <h4>Improvments: Boyer-Lindquist</h4>
+                <h3>Improvments: Boyer-Lindquist</h3>
                 <div>
                     <p>
                         Boyer-Lindquist Coordinates consist of 4 components: . The first 3 coordinates, , are oblate spherical coordinates. Like in the Schwarzschild case, these coordinates are typically normalized such that the black hole radius is 1. We also have a -coordinate, which marks the time of an event relative to a distant, unmoving observer. This coordinate system allows us to take into account the asymmetric effect of a black hole’s rotation on spacetime curvature.
@@ -294,7 +297,7 @@
                     </p>
                 </div>
 
-                <h4>Improvements: Cash-Karp Method</h4>
+                <h3>Improvements: Cash-Karp Method</h3>
                 <div>
                     <p> Our ray marching approach for Kerr black holes uses the Cash-Karp method, a fifth-order Runge-Kutta method with an adaptive step size. Cash-Karp is particularly efficient for ODEs with rapidly changing behavior by decreasing step sizes when the solution changes rapidly (such as when we are closer to the black hole), increasing accuracy as well as efficiency.
                     </p>
@@ -315,7 +318,7 @@
                     </ol>
                 </div>
 
-                <h4>Improvments: Texture Mapping of Background and Accretion Disk</h4>
+                <h3>Improvments: Texture Mapping of Background and Accretion Disk</h3>
                 <div>
                     <p>
                         For a more realistic accretion disk, we asked an artist friend to create an accretion disk texture for us, pictured here:
@@ -348,49 +351,59 @@
                         </tr>
                         </table>
                     </div>
+                    <p><i>Notable Observations: In the semi-transparent accretion disk render, we can see hints of the blue background and stars showing through the edges of the accretion disk. While subtle, this really contributes to a more realistic look.</i></p>
                 </div>
 
-                <h4>Improvements: Bloom Filter Effect</h4>
+                <h3>Improvements: Bloom Filter Effect</h3>
                 <div>
-                    <p> As a post-processing effect, we apply a bloom filter to simulate camera lens flare and brighter intensity of the accretion disk. Bloom also creates a glowing effect where the light of the accretion disk appears to bleed over the edges. After the ray-marching process, we take a square Gaussian kernel and convolve it with each of the pixel colors that belong to the accretion disk. We add this output back to the frame buffer before writing out an image file.</p>
+                    <p> As a post-processing effect, we apply a bloom filter to simulate camera lens flare and brighter intensity of the accretion disk. Bloom also creates a glowing effect where the light of the accretion disk appears to bleed over the edges. After the ray-marching process, we take a square Gaussian kernel and convolve it with each of the pixel colors that belong to the accretion disk. We add this output back to the frame buffer before writing out an image file. Below are images where we gradually increase the intensity of the bloom effect. </p>
                     <div align="middle">
                         <table style="width:100%">
                     
-                        <tr align="center">
-                            <td>
-                              <img src="bloom/kerr_0.6_500_nobg_nobloom.png" align="middle" width="400px"/>
-                              <figcaption> No Bloom</figcaption>
-                            </td>
-                            <td>
-                              <img src="bloom/kerr_0.6_500_nobg_bloom_41_13_8.png" align="middle" width="400px"/>
-                              <figcaption> Some Bloom </figcaption>
-                            </td>
-                        </tr>
-                        <tr align="center">
-                            <td>
-                              <img src="bloom/kerr_0.6_500_nobg_bloom_41_41.png" align="middle" width="400px"/>
-                              <figcaption> More Bloom</figcaption>
-                            </td>
-                            <td>
-                              <img src="bloom/kerr_0.6_500_nobg_bloom_41_57_1.png" align="middle" width="400px"/>
-                              <figcaption>Too Much Bloom</figcaption>
-                            </td>
-                          </tr>
-                          <tr align="center">
-                            <td>
-                              <img src="bloom/bloom_star.png" align="middle" width="400px"/>
-                              <figcaption>Bloom with Starfield</figcaption>
-                            </td>
-                            <td>
-                                <img src="bloom/bloom_star2.png" align="middle" width="400px"/>
+                            <tr align="center">
+                                <td>
+                                <img src="bloom/kerr_0.6_500_nobg_nobloom.png" align="middle" width="200px"/>
+                                <figcaption> No Bloom</figcaption>
+                                </td>
+                                <td>
+                                <img src="bloom/kerr_0.6_500_nobg_bloom_41_13_8.png" align="middle" width="200px"/>
+                                <figcaption> Some Bloom </figcaption>
+                                </td>
+                            <!-- </tr>
+                            <tr align="center"> -->
+                                <td>
+                                <img src="bloom/kerr_0.6_500_nobg_bloom_41_41.png" align="middle" width="200px"/>
+                                <figcaption> More Bloom</figcaption>
+                                </td>
+                                <td>
+                                <img src="bloom/kerr_0.6_500_nobg_bloom_41_57_1.png" align="middle" width="200px"/>
+                                <figcaption>Too Much Bloom</figcaption>
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="width:100%">
+                            <tr align="center">
+                                <td>
+                                <img src="bloom/bloom_star.png" align="middle" width="400px"/>
                                 <figcaption>Bloom with Starfield</figcaption>
-                            </td>
-                          </tr>
+                                </td>
+                                <td>
+                                    <img src="bloom/bloom_star2.png" align="middle" width="400px"/>
+                                    <figcaption>Bloom with Starfield</figcaption>
+                                </td>
+                            </tr>
                         </table>
                     </div>
+                    <p>
+                        <i>
+                        We think that the level of bloom in #3 is the best visually; there 
+                        is a subtle glowing effect that still showcases the structure of the accretion disk fairly well.
+                        </i>
+                    </p>
                 </div>
 
-                <h4>[Attempted] Improvments: Early Ray Termination Optimization</h4>
+
+                <h3>[Attempted] Improvments: Early Ray Termination Optimization</h3>
                 <div>
                     <p>
                         This paper describes the rendering methods used by DNEG to produce the images of a spinning black hole in the movie Interstellar. Before marching a ray, DNEG uses an early ray termination algorithm that calculates whether or not the ray originates from the black hole’s event horizon; if it does, the ray does not need to be considered further. DNEG only performs numerical integration for rays that originate from the accretion disk or the celestial sphere/starfield background.
@@ -401,29 +414,37 @@
                 </div>
             </div>
 
-            <h3> Problems Encountered and Lesson Learned</h3>
+            <h2> Problems Encountered and Lesson Learned</h2>
             <div>
                 <p>
                     Throughout this project, one of the difficulties we encountered were surrounding the technical approaches of our blackhole implementation. It was difficult to understand physics formulas presented in the paper and parse the heavy mathematical explanations for the existing blackhole models we read about in the references. 
 
                 </p>
                 <p>
-                    We also spend some time understanding the starter code provided by project 3 and project 4. Previously, we treated a lot of the code provided in the starter code as a black box and this project gave us an opportunity to explore how the ray tracing and simulation systems were set up. Based on these new understanding and familiarity, we made many design decisions for this project of rendering blackholes. 
+                    We also spend some time understanding the starter code provided by project 3 and project 4. Previously, we treated a lot of the code provided in the starter skeleton as a black box and this project gave us an opportunity to explore how the ray tracing and simulation systems were set up. 
+                    This understanding influenced our design decisions when setting up the ray-marching infrastructure.
                 </p>
                 <p>
-                    Through this project, we gained some insights into the nuanced differences between various blackhole models and the ray marching algorithm. Overall, we learned a lot through researching, implementing, and exploring!
+                    Through this project, we also gained some insights into the nuanced differences between various blackhole models and the ray marching algorithm. Overall, we learned a lot through researching, implementing, and exploring!
 
                 </p>
                 <p>
-                    Lessons learned: this entire project was one large bug. Haha 
+                    Lessons learned: this entire project was one large bug. Haha pain.
 
                 </p>
             </div>
         </div>
-        <div>
-            <h2> Final Results </h2>
 
-            <h3> Varing Inclination Angle</h3>
+        <p>
+
+
+        <div>
+            <h1> Final Results </h1>
+            
+            <p>
+                The two gifs shown below demonstrate the effect of varying the inclination angle of the accretion disk, simulating the effect of a camera orbiting a black hole.
+            </p>
+            <h2> Varing Inclination Angle</h2>
             <div align="middle">
                 <table style="width:100%">
                 <tr align="center">
@@ -438,8 +459,12 @@
                 </tr>
                 </table>
             </div>
+            
+            <p>
+                The next two gifs demonstrate the effects of varying the black hole’s angular momentum. We observe changes in the black hole size and asymmetric distortions of both the accretion disk and background. 
+            </p>
 
-            <h3> Varing Angular Momentum</h3>
+            <h2> Varing Angular Momentum</h2>
             <div align="middle">
                 <table style="width:100%">
                 <tr align="center">
@@ -454,8 +479,38 @@
                 </tr>
                 </table>
             </div>
+            <p>
+                The following 4 images also demonstrate effects of varying the angular momentum, with the camera placed further away from the black hole so that we can see more of the starfield. One more noticeable change is the counterclockwise rotation of images on the Einstein Ring as angular momentum increases.
+            </p>
+            <div align="middle">
+                <table style="width:100%">
+                <tr align="center">
+                    <td>
+                        <img src="a-values/kerr_0.1_500_bg1_bloom_41_13_4.png" align="middle" width="200px"/>
+                        <figcaption>a = 0.1</figcaption>
+                    </td>
+                    <td>
+                        <img src="a-values/kerr_0.3_500_bg1_bloom_41_13_4.png" align="middle" width="200px"/>
+                        <figcaption>a = 0.3</figcaption>
+                    </td>
+                    <td>
+                        <img src="a-values/kerr_0.6_500_bg1_bloom_41_13_4.png" align="middle" width="200px"/>
+                        <figcaption>a = 0.6</figcaption>
+                    </td>
+                    <td>
+                        <img src="a-values/kerr_0.9_500_bg1_bloom_41_13_4.png" align="middle" width="200px"/>
+                        <figcaption>a = 0.9</figcaption>
+                    </td>
+                </tr>
+                </table>
+            </div>
+
+            <br>
+
 
             <h3> Starfield Accretion Texture Mapping Results</h3>
+            <p>Lastly, we present some large, high-quality renders we produced. These took roughly 6.5 hours each on a 10 core machine:
+            </p>
 
             <div align="middle">
                 <table style="width:100%">
@@ -501,62 +556,260 @@
                 </tr>
                 </table>
             </div>
-        </div>    
+            <p>As is standard practice in classes, we are obligated to use the professor’s faces for a meme render. Or perhaps… a RENder:
+            </p>
+            <p> Behold the infinite</p>
+            <div align="middle">
+                <table style="width:100%">
+                    <tr align="center">
+                        <td>
+                            <img src="final_images/prof_ren.png" align="middle" width="400px"/>
+                            <figcaption>Professor Ren Ng</figcaption>
+                        </td>
+                        <td>
+                            <img src="final_images/prof_obrien.png" align="middle" width="400px"/>
+                            <figcaption>Professor James O'Brien</figcaption>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>  
+        
+        <br>
 
         <div>
             <h2> References </h2>
             <ul>
                 <li>
-                    Interstellar paper: 
+                    [1] <i>Interstellar</i> paper: 
                     <a href= "https://iopscience.iop.org/article/10.1088/0264-9381/32/6/065001/pdf">
                         https://iopscience.iop.org/article/10.1088/0264-9381/32/6/065001/pdf 
                     </a>
                 </li>
                 <li>
-                    Bloom shader filter: <a href = " https://learnopengl.com/Advanced-Lighting/Bloom">
+                    [2] Bloom shader filter: <a href = " https://learnopengl.com/Advanced-Lighting/Bloom">
                         https://learnopengl.com/Advanced-Lighting/Bloom
                     </a>
                 </li>
-                <li> Reference 1: <a href = "https://rantonels.github.io/starless/">https://rantonels.github.io/starless/</a></li>
+                <li> 
+                    [3] 
+                    Reference 1: 
+                    <a href = "https://rantonels.github.io/starless/">https://rantonels.github.io/starless/</a></li>
                 <li>
-                    Reference 2: <a href = "http://locklessinc.com/articles/raytracing/">http://locklessinc.com/articles/raytracing/</a>
+                    [4]
+                    Reference 2: 
+                    <a href = "http://locklessinc.com/articles/raytracing/">
+                        http://locklessinc.com/articles/raytracing/
+                    </a>
                 </li>
                 <li>
-                    Reference 3: <a href = "https://www.codeproject.com/Articles/994466/Ray-Tracing-a-Black-Hole-in-Csharp">
+                    [5] Reference 3: 
+                    <a href = "https://www.codeproject.com/Articles/994466/Ray-Tracing-a-Black-Hole-in-Csharp">
                         https://www.codeproject.com/Articles/994466/Ray-Tracing-a-Black-Hole-in-Csharp
                     </a>                    
                 </li>
                 <li>
-                    Kerr Metric: <a href = "https://en.wikipedia.org/wiki/Kerr_metric">
+                    [6] Kerr Metric: 
+                    <a href = "https://en.wikipedia.org/wiki/Kerr_metric">
                         https://en.wikipedia.org/wiki/Kerr_metric
                     </a>
                 </li>
                 <li>
-                    Boyer-Lindquist: <a href = "https://en.wikipedia.org/wiki/Boyer–Lindquist_coordinates">
+                    [7] Boyer-Lindquist: 
+                    <a href = "https://en.wikipedia.org/wiki/Boyer–Lindquist_coordinates">
                         https://en.wikipedia.org/wiki/Boyer–Lindquist_coordinates
                     </a>
                 </li>
                 <li>
-                    Cash-Karp method: <a href = "https://en.wikipedia.org/wiki/Cash–Karp_method">
+                    [8] Cash-Karp method: 
+                    <a href = "https://en.wikipedia.org/wiki/Cash–Karp_method">
                         https://en.wikipedia.org/wiki/Cash–Karp_method
                     </a>
                 </li>
                 <li>
-                    Runge-Kutta method: <a href = "https://en.wikipedia.org/wiki/Runge–Kutta_methods">
+                    [9] Runge-Kutta method: 
+                    <a href = "https://en.wikipedia.org/wiki/Runge–Kutta_methods">
                         https://en.wikipedia.org/wiki/Runge–Kutta_methods
+                    </a>
+                </li>
+                <li>
+                    [10] Ray Diagram: 
+                    <a href = "https://galileo-unbound.blog/2019/07/29/orbiting-photons-around-a-black-hole/">
+                        https://galileo-unbound.blog/2019/07/29/orbiting-photons-around-a-black-hole/
                     </a>
                 </li>
             </ul>
         </div> 
 
+        <br>
+
         <div>
             <h2> Team Contributions </h2>
-            
+            <h4> Grace Chen</h4>
+            <ul>
+                <li>Attempted alpha channel mapping (generated many bug art instead)
+                </li>
+                <li>
+                    Rendered animated gifs to demonstrate varying inclination angle
+                </li>
+                <li>
+                    Attempted simulation by modifying project 4 codebase (it didn’t work out TT)
+                </li>
+            </ul>
+            <h4> Jerry Zhang</h4>
+            <ul>
+                <li>Rendered animated gifs to demonstrate varying inclination angle
+                </li>
+                <li>Modified CLI interface to take in inclination and alpha as parameters</li>
+            </ul>
+                
+            <h4> Mingyang Wang</h4>
+            <ul>
+                <li>Set up ray marching infrastructure
+                </li>
+                <li>
+                    Implemented alpha texture mapping for partially transparent accretion disk
+                </li>
+                <li>
+                    Attempted Early Ray Termination Optimization
+
+                </li>
+                <li>
+                    Set up Boyer-Lindquist + Cash-Karp infrastructure
+                </li>
+            </ul>
+            <h4> Irene Geng</h4>
+            <ul>
+                <li>
+                    Set up ray marching infrastructure
+                </li>
+                <li>
+                    Bloom Filter
+                </li>
+                <li>
+                    Attempted Early Ray Termination Optimization
+                </li>
+                <li>
+                    Set up Boyer-Lindquist + Cash-Karp infrastructure
+                </li>
+            </ul>
         </div> 
 
-        <div> 
+        <br>
 
-            <h2>Bug Art Gallery</h2>
+        <div> 
+            <h1> Appendix</h1>
+            <div>
+               
+                <h3> A: the acceleration derivation </h3>
+                <p>
+                    The following derivation was taken from [3]:
+                </p>
+                <p>
+                    For a Schwarzschild Black Hole, the angular momentum  and charge . Additionally, we normalize the speed of light  and the black hole’s Schwarzchild radius . Therefore, the line element (in spherical coordinates) can be defined as:
+
+                </p>
+                <p>
+                    We set , so . Additionally, we define  and , and then set .
+                </p>
+                <p> 
+                    RE, where  and 
+                </p>
+                <p>
+                    We then perform the change of coordinates , yielding:
+
+                </p>
+                <p>
+                    We take , so 
+
+                </p>
+                <p>
+                    This equation can then be solved to yield: , or .
+                    The Binet equation for the equation for orbit of a particle is 
+                    By setting , equating the above two equations, and plugging back in , we obtain:
+                    , which we can use for ray marching
+
+                </p>
+
+                <h2> B: Cash-Karp Integration </h2>
+                <div>
+                    <p>
+                        The Cash-Karp method is a type of Runge-Kutta method (the same family as Forward Euler Integration), which approximate the solution of an ODE by iteratively computing a sequence of intermediate values that depend on the previous values and the derivatives of the function at those values. Cash-Karp is a fifth order method, and estimates/integrates forward via:
+
+                    </p>
+                    <p> 
+                        Additionally, Cash-Karp includes a sixth-order estimate to estimate the error of the fifth order solution.  For every timestep, if the error estimate is too large, then Cash-Karp reduces the step size until the error is below some threshold. Error is calculated via
+                    </p>
+                    <p> 
+                        Cash-Karp is advantageous because it allows for high accuracy and efficiency due to its adaptive step size control. In our application, this allows us to take large step sizes while far away from the black hole (where the effect of gravitational lensing is less apparent) and smaller step sizes while close to the black hole, where photon trajectories change drastically.
+
+                    </p>
+                </div>
+                <h2>C: Textures </h2>
+                <div>
+                    <p>Our checkerboard textures used for debugging consisted of grids created in Photoshop:
+                    </p>
+                    <div align="middle">
+                        <table style="width:100%">
+                            <tr align="center">
+                                <td>
+                                    <img src="checker/checker-blue-white.png" align="middle" width="200px"/>
+                                    <figcaption></figcaption>
+                                </td>
+                                <td>
+                                    <img src="checker/checker-red-black.png" align="middle" width="200px"/>
+                                    <figcaption></figcaption>
+                                </td>
+                                <td>
+                                    <img src="checker/checker-magenta-white.png" align="middle" width="200px"/>
+                                    <figcaption></figcaption>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p>Our custom accretion disk texture was created by artist George Geng:</p>
+                    <div align="middle">
+                        <table style="width:100%">
+                            <tr align="center">
+                                <td>
+                                    <img src="alpha_channel/george.png" align="middle" width="400px"/>
+                                    <figcaption></figcaption>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <p>The various background starfield textures we used:</p>
+                    <div align="middle">
+                        <table style="width:100%">
+                        <tr align="center">
+                            <td>
+                                <img src="final_images/1.png" align="middle" width="400px" height = "300px"/>
+                                <figcaption></figcaption>
+                            </td>
+                            <td>
+                                <img src="final_images/2.png" align="middle" width="400px" height = "300px"/>
+                                <figcaption></figcaption>
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td>
+                                <img src="final_images/3.png" align="middle" width="400px" height = "300px"/>
+                                <figcaption></figcaption>
+                            </td>
+                            <td>
+                                <img src="final_images/4.png" align="middle" width="400px" height = "300px"/>
+                                <figcaption></figcaption>
+                            </td>
+                        </tr>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <br>
+            
+            <h2>D: Bug Art Gallery</h2>
             <div align="middle">
                 <table style="width:100%">
                 <tr align="center">
@@ -615,52 +868,10 @@
                 </tr>
                 </table>
             </div>
-
-            <div>
-                <h2> Appendix</h2>
-                <h3> A: the acceleration derivation </h3>
-
-                <h3> B: Cash-Karp Integration </h3>
-            </div>
-            
+            <br>
         
         </div>
 
-
-        <!-- <div align="middle">
-            <table style="width:100%">
-              <tr align="center">
-                <td>
-                  <img src="" align="middle" width="400px"/>
-                  <figcaption></figcaption>
-                </td>
-                <td>
-                  <img src="" align="middle" width="400px"/>
-                  <figcaption></figcaption>
-                </td>
-              </tr>
-              <tr align="center">
-                <td>
-                  <img src="" align="middle" width="400px"/>
-                  <figcaption></figcaption>
-                </td>
-                <td>
-                  <img src="" align="middle" width="400px"/>
-                  <figcaption></figcaption>
-                </td>
-              </tr>
-              <tr align="center">
-                <td>
-                  <img src="" align="middle" width="400px"/>
-                  <figcaption></figcaption>
-                </td>
-                <td>
-                    <img src="" align="middle" width="400px"/>
-                    <figcaption></figcaption>
-                </td>
-              </tr>
-            </table>
-        </div> -->
 
         </div>
         <br>
